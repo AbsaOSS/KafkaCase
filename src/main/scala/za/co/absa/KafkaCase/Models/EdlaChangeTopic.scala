@@ -14,7 +14,8 @@ case class EdlaChangeTopic(
 )
 
 object EdlaChangeTopic {
-  sealed trait Operation {
+  sealed trait Operation
+  object Operation {
     case class CREATE() extends Operation
     case class UPDATE() extends Operation
     case class ARCHIVE() extends Operation
