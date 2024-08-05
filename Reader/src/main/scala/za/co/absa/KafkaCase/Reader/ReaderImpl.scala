@@ -4,7 +4,6 @@ import io.circe.Decoder
 import io.circe.jawn.decode
 import org.slf4j.LoggerFactory
 import org.apache.kafka.clients.consumer.{ConsumerRecord, KafkaConsumer}
-import za.co.absa.KafkaCase.Common.KeyValuePair
 import za.co.absa.KafkaCase.Reader.ReaderImpl.log
 
 import java.time.Duration
@@ -18,13 +17,13 @@ class ReaderImpl[TType: Decoder](props: Properties, topic: String, timeout: Dura
 
   override def hasNext(): Boolean = singlePollIterator.hasNext
 
-  override def next(): KeyValuePair[String, TType] = {
+  override def next(): (String, TType) = {
     log.info("Fetching next item")
     val nextItem = singlePollIterator.next()
     val nextItemTyped = decode[TType](nextItem.value()).getOrElse(throw new Exception(s"Cannot parse $nextItem"))
     if (!singlePollIterator.hasNext)
       singlePollIterator = fetchNextBatch()
-    KeyValuePair(nextItem.key(), nextItemTyped)
+    nextItem.key() -> nextItemTyped
   }
 
   def close(): Unit = consumer.close()
