@@ -17,7 +17,7 @@
 package za.co.absa.KafkaCase.Writer
 
 import io.circe.Encoder
-import io.circe.syntax.*
+import io.circe.syntax.EncoderOps
 import org.slf4j.LoggerFactory
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 import za.co.absa.KafkaCase.Writer.WriterImpl.log
@@ -31,7 +31,7 @@ class WriterImpl[TType: Encoder](props: Properties, topic: String) extends Write
     log.info(f"Writing: $key => $value")
     producer.send(new ProducerRecord[String, String](topic, key, value.asJson.noSpaces))
   }
-  
+
   def Flush(): Unit = producer.flush()
 
   override def close(): Unit = producer.close()

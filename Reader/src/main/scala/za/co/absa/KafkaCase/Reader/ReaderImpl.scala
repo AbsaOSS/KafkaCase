@@ -20,7 +20,7 @@ import io.circe.Decoder
 import io.circe.jawn.decode
 import org.slf4j.LoggerFactory
 import org.apache.kafka.clients.consumer.{ConsumerRecord, KafkaConsumer}
-import za.co.absa.KafkaCase.Reader.ReaderImpl.log
+import za.co.absa.KafkaCase.Reader.ReaderImpl.{DEFAULT_TIMEOUT, log}
 
 import java.time.Duration
 import java.util
