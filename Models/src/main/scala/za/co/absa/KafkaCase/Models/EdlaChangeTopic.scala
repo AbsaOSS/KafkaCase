@@ -21,7 +21,7 @@ case class EdlaChangeTopic(
   app_id_snow: String,
   source_app: String,
   environment: String,
-  timestamp_event: String,
+  timestamp_event: Long,
   data_definition: String,
   operation: EdlaChangeTopic.Operation,
   location: String,
