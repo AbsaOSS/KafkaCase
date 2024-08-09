@@ -20,14 +20,7 @@ ThisBuild / scalaVersion     := "3.3.3"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 val mergeStrategy = assembly / assemblyMergeStrategy := {
-  case PathList("META-INF", "services", xs @ _*) => MergeStrategy.filterDistinctLines
-  case PathList("META-INF", "maven", "org.webjars", "swagger-ui", "pom.properties") => MergeStrategy.singleOrError
-  case PathList("META-INF", "resources", "webjars", "swagger-ui", _*) => MergeStrategy.singleOrError
-  case PathList("META-INF", _*) => MergeStrategy.discard
-  case PathList("META-INF", "versions", "9", xs@_*) => MergeStrategy.discard
   case PathList("module-info.class") => MergeStrategy.discard
-  case "application.conf" => MergeStrategy.concat
-  case "reference.conf" => MergeStrategy.concat
   case _ => MergeStrategy.first
 }
 
