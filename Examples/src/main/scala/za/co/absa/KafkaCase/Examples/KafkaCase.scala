@@ -23,8 +23,7 @@ import za.co.absa.KafkaCase.Reader.ReaderImpl
 import za.co.absa.KafkaCase.Writer.WriterImpl
 
 import java.util.{Properties, UUID}
-import io.circe.generic.auto.*
-import scala.util.Using // !!!WARNING!!!: this seems to swallows exceptions during creation of the resource
+import io.circe.generic.auto._
 
 object KafkaCase {
   private def writer_use_case(): Unit = {
@@ -49,10 +48,13 @@ object KafkaCase {
     writerProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer")
 
     // 2 -> MAKE WRITER
-    val writer = new WriterImpl[EdlaChangeTopic](writerProps, "KillMePleaseTopic") // must be assigned outside using, otherwise exception from constructor is swallowed by using block
-    Using (writer) { writer =>
+    val writer = new WriterImpl[EdlaChangeTopic](writerProps, "KillMePleaseTopic")
+    try {
       // 3 -> WRITE
       writer.Write("sampleMessageKey", messageToWrite)
+    } finally {
+      // Releasing resources should be handled by using block in newer versions of scala
+      writer.close()
     }
   }
 
@@ -66,11 +68,14 @@ object KafkaCase {
     readerProps.put(ConsumerConfig.GROUP_ID_CONFIG, s"DebugGroup_${UUID.randomUUID()}")
     readerProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
 
-    // 2 -> MAKE READER
+    // 2 -> MAKE READER (should be in using block for newer versions of scala)
     val reader = new ReaderImpl[EdlaChangeTopic](readerProps, "KillMePleaseTopic") // must be assigned outside using, otherwise exception from constructor is swallowed by using block
-    Using(reader) { reader =>
+    try {
       for (item <- reader)
         println(item)
+    } finally {
+      // Releasing resources should be handled by using block in newer versions of scala
+      reader.close()
     }
   }
 

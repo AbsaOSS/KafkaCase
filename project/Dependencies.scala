@@ -9,12 +9,12 @@ object Dependencies {
 
   def readerDependencies: Seq[ModuleID] = Seq(
     "io.circe" %% "circe-parser" % "0.14.9",
-    "org.apache.kafka" % "kafka-clients" % "3.7.1"
+    "org.apache.kafka" % "kafka-clients" % "3.8.0"
   )
 
   def writerDependencies: Seq[ModuleID] = Seq(
     "io.circe" %% "circe-parser" % "0.14.9",
-    "org.apache.kafka" % "kafka-clients" % "3.7.1"
+    "org.apache.kafka" % "kafka-clients" % "3.8.0"
   )
 
   def examplesDependencies: Seq[ModuleID] = Seq(

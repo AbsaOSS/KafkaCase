@@ -15,7 +15,10 @@
  */
 import Dependencies.*
 
-ThisBuild / scalaVersion     := "3.3.3"
+lazy val scala_2_12 = "2.12.19"
+lazy val scala_2_13 = "2.13.14"
+
+ThisBuild / scalaVersion := scala_2_13
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
@@ -28,6 +31,7 @@ lazy val commonSettings = Seq(
   assembly / test := {},
   publish := {},
   libraryDependencies ++= commonDependencies,
+  crossScalaVersions := Seq(scala_2_12, scala_2_13)
 )
 
 lazy val models = project
