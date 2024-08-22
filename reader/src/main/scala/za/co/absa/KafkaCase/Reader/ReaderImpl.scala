@@ -47,9 +47,10 @@ class ReaderImpl[TType: Decoder](props: Properties, topic: String, timeout: Dura
   private def fetchNextBatch(): util.Iterator[ConsumerRecord[String, String]] = {
     log.info("Fetching next batch")
     var nextIterator = consumer.poll(timeout).iterator()
-    while(neverEnding && !nextIterator.hasNext)
+    while(neverEnding && !nextIterator.hasNext) {
       log.info("Re-Fetching next batch")
       nextIterator = consumer.poll(timeout).iterator()
+    }
     nextIterator
   }
 }
