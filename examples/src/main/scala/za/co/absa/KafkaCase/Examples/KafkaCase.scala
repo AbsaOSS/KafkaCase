@@ -69,7 +69,7 @@ object KafkaCase {
     readerProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
 
     // 2 -> MAKE READER (should be in using block for newer versions of scala)
-    val reader = new ReaderImpl[EdlaChangeTopic](readerProps, "KillMePleaseTopic") // must be assigned outside using, otherwise exception from constructor is swallowed by using block
+    val reader = new ReaderImpl[EdlaChangeTopic](readerProps, "KillMePleaseTopic")
     try {
       for (item <- reader)
         println(item)
