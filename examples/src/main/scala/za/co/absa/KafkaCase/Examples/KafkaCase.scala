@@ -33,7 +33,7 @@ object KafkaCase {
       app_id_snow = "N/A",
       source_app = "ThisCode",
       environment = "DEV",
-      timestamp_event = "RIGHT_NOW",
+      timestamp_event = 12345,
       data_definition = "TestingThis",
       operation = EdlaChangeTopic.Operation.CREATE(),
       location = "ether",
