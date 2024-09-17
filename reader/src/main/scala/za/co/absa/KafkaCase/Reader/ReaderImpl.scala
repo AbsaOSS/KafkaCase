@@ -31,7 +31,7 @@ class ReaderImpl[TType: Decoder](props: Properties, topic: String, timeout: Dura
   consumer.subscribe(util.Arrays.asList(topic))
   private var singlePollIterator = fetchNextBatch()
 
-  override def hasNext(): Boolean = singlePollIterator.hasNext
+  override def hasNext: Boolean = singlePollIterator.hasNext
 
   override def next(): (String, TType) = {
     log.info("Fetching next item")
