@@ -5,7 +5,11 @@ object Dependencies {
     "ch.qos.logback" % "logback-classic" % "1.5.6",
   )
 
-  def modelsDependencies: Seq[ModuleID] = Seq.empty[ModuleID]
+  def modelsDependencies: Seq[ModuleID] = Seq(
+    "io.circe" %% "circe-generic" % "0.14.9",
+    "io.circe" %% "circe-parser" % "0.14.9" % Test,
+    "org.scalatest" %% "scalatest" % "3.2.19" % Test
+  )
 
   def readerDependencies: Seq[ModuleID] = Seq(
     "io.circe" %% "circe-parser" % "0.14.9",
@@ -17,7 +21,5 @@ object Dependencies {
     "org.apache.kafka" % "kafka-clients" % "3.8.0"
   )
 
-  def examplesDependencies: Seq[ModuleID] = Seq(
-    "io.circe" %% "circe-generic" % "0.14.9",
-  )
+  def examplesDependencies: Seq[ModuleID] = Seq.empty[ModuleID]
 }

@@ -16,6 +16,10 @@
 
 package za.co.absa.KafkaCase.Models
 
+import io.circe.{Decoder, Encoder}
+import io.circe.generic.JsonCodec
+
+@JsonCodec
 case class SchemaRunTopic(
   id: String,
   job_ref: String,
@@ -30,9 +34,23 @@ case class SchemaRunTopic(
 )
 
 object SchemaRunTopic {
-  sealed trait Status {
+  sealed trait Status
+
+  object Status {
     case class Finished() extends Status
     case class Failed() extends Status
     case class Killed() extends Status
+
+    implicit val operationEncoder: Encoder[Status] = Encoder.encodeString.contramap[Status] {
+      case Finished() => s"Finished"
+      case Failed() => s"Failed"
+      case Killed() => s"Killed"
+    }
+
+    implicit val operationDecoder: Decoder[Status] = Decoder.decodeString.emap {
+      case s"Finished" => Right(Finished())
+      case s"Failed" => Right(Failed())
+      case s"Killed" => Right(Killed())
+    }
   }
 }

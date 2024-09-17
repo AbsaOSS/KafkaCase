@@ -39,7 +39,8 @@ lazy val models = project
   .settings(
     commonSettings ++ Seq(
       name := "KafkaCase-Models",
-      libraryDependencies ++= modelsDependencies
+      libraryDependencies ++= modelsDependencies,
+      scalacOptions ++= Seq("-Ymacro-annotations"),
     )
   )
   .enablePlugins(AutomateHeaderPlugin)
