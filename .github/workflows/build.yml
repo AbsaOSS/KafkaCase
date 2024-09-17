@@ -20,5 +20,5 @@ jobs:
           jvm: corretto:21.0.3.9.1
           apps: sbt
 
-      - name: Build
-        run: sbt +clean +compile
+      - name: Clean Build Test
+        run: sbt +clean +test
