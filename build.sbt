@@ -40,8 +40,10 @@ lazy val models = project
     commonSettings ++ Seq(
       name := "KafkaCase-Models",
       libraryDependencies ++= modelsDependencies,
-      scalacOptions ++= Seq("-Ymacro-annotations"),
-    )
+      scalacOptions ++= { if (scalaVersion.value.startsWith("2.13")) Seq("-Ymacro-annotations") else Seq("-Xmacro-settings:enable-macro-paradise") }
+    ) ++ {
+      if (scalaVersion.value.startsWith("2.12")) {Seq(addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full))} else {Seq.empty}
+    }
   )
   .enablePlugins(AutomateHeaderPlugin)
 

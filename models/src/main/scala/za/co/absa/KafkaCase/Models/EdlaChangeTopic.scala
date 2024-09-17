@@ -48,9 +48,9 @@ object EdlaChangeTopic {
     }
 
     implicit val operationDecoder: Decoder[Operation] = Decoder.decodeString.emap {
-      case s"CREATE" => Right(CREATE())
-      case s"UPDATE" => Right(UPDATE())
-      case s"ARCHIVE" => Right(ARCHIVE())
+      case "CREATE" => Right(CREATE())
+      case "UPDATE" => Right(UPDATE())
+      case "ARCHIVE" => Right(ARCHIVE())
     }
   }
 }

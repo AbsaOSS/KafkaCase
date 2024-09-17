@@ -48,9 +48,9 @@ object SchemaRunTopic {
     }
 
     implicit val operationDecoder: Decoder[Status] = Decoder.decodeString.emap {
-      case s"Finished" => Right(Finished())
-      case s"Failed" => Right(Failed())
-      case s"Killed" => Right(Killed())
+      case "Finished" => Right(Finished())
+      case "Failed" => Right(Failed())
+      case "Killed" => Right(Killed())
     }
   }
 }
