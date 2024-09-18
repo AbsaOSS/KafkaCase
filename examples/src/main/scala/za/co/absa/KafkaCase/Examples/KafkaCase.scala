@@ -23,7 +23,6 @@ import za.co.absa.KafkaCase.Reader.ReaderImpl
 import za.co.absa.KafkaCase.Writer.WriterImpl
 
 import java.util.{Properties, UUID}
-import io.circe.generic.auto._
 
 object KafkaCase {
   private def writer_use_case(): Unit = {

@@ -16,6 +16,10 @@
 
 package za.co.absa.KafkaCase.Models
 
+import io.circe.{Decoder, Encoder}
+import io.circe.generic.JsonCodec
+
+@JsonCodec
 case class EdlaChangeTopic(
   id: String,
   app_id_snow: String,
@@ -31,9 +35,22 @@ case class EdlaChangeTopic(
 
 object EdlaChangeTopic {
   sealed trait Operation
+
   object Operation {
     case class CREATE() extends Operation
     case class UPDATE() extends Operation
     case class ARCHIVE() extends Operation
+
+    implicit val operationEncoder: Encoder[Operation] = Encoder.encodeString.contramap[Operation] {
+      case CREATE() => s"CREATE"
+      case UPDATE() => s"UPDATE"
+      case ARCHIVE() => s"ARCHIVE"
+    }
+
+    implicit val operationDecoder: Decoder[Operation] = Decoder.decodeString.emap {
+      case "CREATE" => Right(CREATE())
+      case "UPDATE" => Right(UPDATE())
+      case "ARCHIVE" => Right(ARCHIVE())
+    }
   }
 }
