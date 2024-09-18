@@ -14,39 +14,38 @@
  * limitations under the License.
  */
 
-package za.co.absa.KafkaCase.models
+package za.co.absa.KafkaCase.Models
 
 import io.circe.jawn.decode
 import io.circe.syntax.EncoderOps
 import org.scalatest.funsuite.AnyFunSuite
-import za.co.absa.KafkaCase.Models.EdlaChangeTopic
 
 class EdlaChangeTopicUnitTests extends AnyFunSuite {
   private val instance =  EdlaChangeTopic(
-    id = "DebugId",
     app_id_snow = "N/A",
-    source_app = "ThisCode",
+    data_definition_id = "TestingThis",
     environment = "DEV",
-    timestamp_event = 12345,
-    data_definition = "TestingThis",
-    operation = EdlaChangeTopic.Operation.CREATE(),
-    location = "ether",
     format = "FooBar",
-    schema_link = "http://not.here"
+    guid = "DebugId",
+    location = "ether",
+    operation = EdlaChangeTopic.Operation.CREATE(),
+    schema_link = "http://not.here",
+    source_app = "ThisCode",
+    timestamp_event = 12345
   )
 
   private val json =
     """{
-      |  "id" : "DebugId",
       |  "app_id_snow" : "N/A",
-      |  "source_app" : "ThisCode",
+      |  "data_definition_id" : "TestingThis",
       |  "environment" : "DEV",
-      |  "timestamp_event" : 12345,
-      |  "data_definition" : "TestingThis",
-      |  "operation" : "CREATE",
-      |  "location" : "ether",
       |  "format" : "FooBar",
-      |  "schema_link" : "http://not.here"
+      |  "guid" : "DebugId",
+      |  "location" : "ether",
+      |  "operation" : "CREATE",
+      |  "schema_link" : "http://not.here",
+      |  "source_app" : "ThisCode",
+      |  "timestamp_event" : 12345
       |}""".stripMargin
 
   test("Serializes to JSON properly") {

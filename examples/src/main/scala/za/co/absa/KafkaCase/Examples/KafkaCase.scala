@@ -28,16 +28,16 @@ object KafkaCase {
   private def writer_use_case(): Unit = {
     // 0 -> HAVE SOMETHING TO WRITE
     val messageToWrite = EdlaChangeTopic(
-      id = "DebugId",
       app_id_snow = "N/A",
-      source_app = "ThisCode",
+      data_definition_id = "TestingThis",
       environment = "DEV",
-      timestamp_event = 12345,
-      data_definition = "TestingThis",
-      operation = EdlaChangeTopic.Operation.CREATE(),
-      location = "ether",
       format = "FooBar",
-      schema_link = "http://not.here"
+      guid = "DebugId",
+      location = "ether",
+      operation = EdlaChangeTopic.Operation.CREATE(),
+      schema_link = "http://not.here",
+      source_app = "ThisCode",
+      timestamp_event = 12345
     )
 
     // 1 -> DEFINE PROPS - kafka to treat all as string

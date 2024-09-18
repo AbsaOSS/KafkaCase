@@ -14,39 +14,38 @@
  * limitations under the License.
  */
 
-package za.co.absa.KafkaCase.models
+package za.co.absa.KafkaCase.Models
 
 import io.circe.jawn.decode
 import io.circe.syntax.EncoderOps
 import org.scalatest.funsuite.AnyFunSuite
-import za.co.absa.KafkaCase.Models.SchemaRunTopic
 
 class SchemaRunTopicUnitTests extends AnyFunSuite {
   private val instance =  SchemaRunTopic(
-    id = "DebugId",
-    job_ref = "UnitTestJob",
     app_id_snow = "N/A",
-    source_app = "ThisTest",
-    environment = "TEST",
-    timestamp_start = 12345,
-    timestamp_end = 67890,
     data_definition_id = "Foo",
+    environment = "TEST",
+    guid = "DebugId",
+    job_ref = "UnitTestJob",
+    message = "FooBar",
+    source_app = "ThisTest",
     status = SchemaRunTopic.Status.Killed(),
-    message = "FooBar"
+    timestamp_end = 67890,
+    timestamp_start = 12345
   )
 
   private val json =
     """{
-      |  "id" : "DebugId",
-      |  "job_ref" : "UnitTestJob",
       |  "app_id_snow" : "N/A",
-      |  "source_app" : "ThisTest",
-      |  "environment" : "TEST",
-      |  "timestamp_start" : 12345,
-      |  "timestamp_end" : 67890,
       |  "data_definition_id" : "Foo",
+      |  "environment" : "TEST",
+      |  "guid" : "DebugId",
+      |  "job_ref" : "UnitTestJob",
+      |  "message" : "FooBar",
+      |  "source_app" : "ThisTest",
       |  "status" : "Killed",
-      |  "message" : "FooBar"
+      |  "timestamp_end" : 67890,
+      |  "timestamp_start" : 12345
       |}""".stripMargin
 
   test("Serializes to JSON properly") {
