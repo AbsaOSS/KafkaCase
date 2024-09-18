@@ -33,13 +33,16 @@ class ReaderImpl[TType: Decoder](props: Properties, topic: String, timeout: Dura
 
   override def hasNext: Boolean = singlePollIterator.hasNext
 
-  override def next(): (String, TType) = {
+  override def next(): (String, Either[String, TType]) = {
     log.info("Fetching next item")
     val nextItem = singlePollIterator.next()
-    val nextItemTyped = decode[TType](nextItem.value()).getOrElse(throw new Exception(s"Cannot parse $nextItem"))
     if (!singlePollIterator.hasNext)
       singlePollIterator = fetchNextBatch()
-    nextItem.key() -> nextItemTyped
+    val nextItemMaybeTyped = decode[TType](nextItem.value()) match {
+      case Left(_) => Left(s"Cannot parse ${nextItem.value()}")
+      case Right(item) => Right(item)
+    }
+    nextItem.key() -> nextItemMaybeTyped
   }
 
   def close(): Unit = consumer.close()
