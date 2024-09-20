@@ -21,16 +21,16 @@ import io.circe.generic.JsonCodec
 
 @JsonCodec
 case class EdlaChangeTopic(
-  id: String,
   app_id_snow: String,
-  source_app: String,
+  data_definition_id: String,
   environment: String,
-  timestamp_event: Long,
-  data_definition: String,
-  operation: EdlaChangeTopic.Operation,
-  location: String,
   format: String,
-  schema_link: String
+  guid: String,
+  location: String,
+  operation: EdlaChangeTopic.Operation,
+  schema_link: String,
+  source_app: String,
+  timestamp_event: Long
 )
 
 object EdlaChangeTopic {

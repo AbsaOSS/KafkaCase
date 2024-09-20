@@ -21,16 +21,16 @@ import io.circe.generic.JsonCodec
 
 @JsonCodec
 case class SchemaRunTopic(
-  id: String,
-  job_ref: String,
   app_id_snow: String,
-  source_app: String,
-  environment: String,
-  timestamp_start: Long,
-  timestamp_end: Long,
   data_definition_id: String,
+  environment: String,
+  guid: String,
+  job_ref: String,
+  message: String,
+  source_app: String,
   status: SchemaRunTopic.Status,
-  message: String
+  timestamp_end: Long,
+  timestamp_start: Long
 )
 
 object SchemaRunTopic {
