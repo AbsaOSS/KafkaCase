@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-package za.co.absa.KafkaCase.Examples
+package za.co.absa.kafkacase.examples
 
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.producer.ProducerConfig
-import za.co.absa.KafkaCase.Models.EdlaChangeTopic
-import za.co.absa.KafkaCase.Reader.ReaderImpl
-import za.co.absa.KafkaCase.Writer.WriterImpl
+import za.co.absa.kafkacase.models.topics.EdlaChange
+import za.co.absa.kafkacase.reader.ReaderImpl
+import za.co.absa.kafkacase.writer.WriterImpl
 
 import java.util.{Properties, UUID}
 
 object KafkaCase {
   private def writer_use_case(): Unit = {
     // 0 -> HAVE SOMETHING TO WRITE
-    val messageToWrite = EdlaChangeTopic(
+    val messageToWrite = EdlaChange(
       app_id_snow = "N/A",
       data_definition_id = "TestingThis",
       environment = "DEV",
       format = "FooBar",
       guid = "DebugId",
       location = "ether",
-      operation = EdlaChangeTopic.Operation.CREATE(),
+      operation = EdlaChange.Operation.Create(),
       schema_link = "http://not.here",
       source_app = "ThisCode",
       timestamp_event = 12345
@@ -47,7 +47,7 @@ object KafkaCase {
     writerProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer")
 
     // 2 -> MAKE WRITER
-    val writer = new WriterImpl[EdlaChangeTopic](writerProps, "KillMePleaseTopic")
+    val writer = new WriterImpl[EdlaChange](writerProps, "KillMePleaseTopic")
     try {
       // 3 -> WRITE
       writer.Write("sampleMessageKey", messageToWrite)
@@ -68,7 +68,7 @@ object KafkaCase {
     readerProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
 
     // 2 -> MAKE READER (should be in using block for newer versions of scala)
-    val reader = new ReaderImpl[EdlaChangeTopic](readerProps, "KillMePleaseTopic")
+    val reader = new ReaderImpl[EdlaChange](readerProps, "KillMePleaseTopic")
     try {
       for (item <- reader)
         println(item)

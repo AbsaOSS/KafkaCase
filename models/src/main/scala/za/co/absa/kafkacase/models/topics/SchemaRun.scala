@@ -14,43 +14,43 @@
  * limitations under the License.
  */
 
-package za.co.absa.KafkaCase.Models
+package za.co.absa.kafkacase.models.topics
 
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.JsonCodec
 
 @JsonCodec
-case class EdlaChangeTopic(
+case class SchemaRun(
   app_id_snow: String,
   data_definition_id: String,
   environment: String,
-  format: String,
   guid: String,
-  location: String,
-  operation: EdlaChangeTopic.Operation,
-  schema_link: String,
+  job_ref: String,
+  message: String,
   source_app: String,
-  timestamp_event: Long
+  status: SchemaRun.Status,
+  timestamp_end: Long,
+  timestamp_start: Long
 )
 
-object EdlaChangeTopic {
-  sealed trait Operation
+object SchemaRun {
+  sealed trait Status
 
-  object Operation {
-    case class CREATE() extends Operation
-    case class UPDATE() extends Operation
-    case class ARCHIVE() extends Operation
+  object Status {
+    case class Finished() extends Status
+    case class Failed() extends Status
+    case class Killed() extends Status
 
-    implicit val operationEncoder: Encoder[Operation] = Encoder.encodeString.contramap[Operation] {
-      case CREATE() => s"CREATE"
-      case UPDATE() => s"UPDATE"
-      case ARCHIVE() => s"ARCHIVE"
+    implicit val operationEncoder: Encoder[Status] = Encoder.encodeString.contramap[Status] {
+      case Finished() => s"Finished"
+      case Failed() => s"Failed"
+      case Killed() => s"Killed"
     }
 
-    implicit val operationDecoder: Decoder[Operation] = Decoder.decodeString.emap {
-      case "CREATE" => Right(CREATE())
-      case "UPDATE" => Right(UPDATE())
-      case "ARCHIVE" => Right(ARCHIVE())
+    implicit val operationDecoder: Decoder[Status] = Decoder.decodeString.emap {
+      case "Finished" => Right(Finished())
+      case "Failed" => Right(Failed())
+      case "Killed" => Right(Killed())
     }
   }
 }

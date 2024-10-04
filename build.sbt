@@ -38,7 +38,7 @@ lazy val models = project
   .disablePlugins(sbtassembly.AssemblyPlugin)
   .settings(
     commonSettings ++ Seq(
-      name := "KafkaCase-Models",
+      name := "kafkacase-models",
       libraryDependencies ++= modelsDependencies,
       scalacOptions ++= { if (scalaVersion.value.startsWith("2.13")) Seq("-Ymacro-annotations") else Seq("-Xmacro-settings:enable-macro-paradise") },
     ),
@@ -50,7 +50,7 @@ lazy val reader = project
   .disablePlugins(sbtassembly.AssemblyPlugin)
   .settings(
     commonSettings ++ Seq(
-      name := "KafkaCase-Reader",
+      name := "kafkacase-reader",
       libraryDependencies ++= readerDependencies
     )
   )
@@ -60,7 +60,7 @@ lazy val writer = project
   .disablePlugins(sbtassembly.AssemblyPlugin)
   .settings(
     commonSettings ++ Seq(
-      name := "KafkaCase-Writer",
+      name := "kafkacase-writer",
       libraryDependencies ++= writerDependencies
     )
   )
@@ -69,7 +69,7 @@ lazy val writer = project
 lazy val examples = project
   .settings(
     commonSettings ++ Seq(
-      name := "KafkaCase-Examples",
+      name := "kafkacase-examples",
       libraryDependencies ++= examplesDependencies,
       mergeStrategy
     )
