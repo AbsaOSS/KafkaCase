@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package za.co.absa.KafkaCase.Models
+package za.co.absa.kafkacase.models.topics
 
 import io.circe.jawn.decode
 import io.circe.syntax.EncoderOps
 import org.scalatest.funsuite.AnyFunSuite
 
-class SchemaRunTopicUnitTests extends AnyFunSuite {
-  private val instance =  SchemaRunTopic(
+class SchemaRunUnitTests extends AnyFunSuite {
+  private val instance =  SchemaRun(
     app_id_snow = "N/A",
     data_definition_id = "Foo",
     environment = "TEST",
@@ -29,7 +29,7 @@ class SchemaRunTopicUnitTests extends AnyFunSuite {
     job_ref = "UnitTestJob",
     message = "FooBar",
     source_app = "ThisTest",
-    status = SchemaRunTopic.Status.Killed(),
+    status = SchemaRun.Status.Killed(),
     timestamp_end = 67890,
     timestamp_start = 12345
   )
@@ -53,6 +53,6 @@ class SchemaRunTopicUnitTests extends AnyFunSuite {
   }
 
   test("Deserializes from JSON properly") {
-    assertResult(instance)(decode[SchemaRunTopic](json).getOrElse(throw new Exception("Failed to parse JSON")))
+    assertResult(instance)(decode[SchemaRun](json).getOrElse(throw new Exception("Failed to parse JSON")))
   }
 }

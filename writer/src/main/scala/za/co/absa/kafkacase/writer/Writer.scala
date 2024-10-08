@@ -14,6 +14,14 @@
  * limitations under the License.
  */
 
-package za.co.absa.KafkaCase.Reader
+package za.co.absa.kafkacase.writer
 
-trait Reader[TType] extends Iterator[(String, Either[String, TType])] with AutoCloseable
+trait Writer[TType] extends AutoCloseable {
+  def Write(key: String, value: TType): Unit
+  def Flush(): Unit
+
+  def WriteSync(key: String, value: TType): Unit = {
+    Write(key, value)
+    Flush()
+  }
+}

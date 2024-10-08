@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package za.co.absa.KafkaCase.Models
+package za.co.absa.kafkacase.models.topics
 
 import io.circe.jawn.decode
 import io.circe.syntax.EncoderOps
 import org.scalatest.funsuite.AnyFunSuite
 
-class EdlaChangeTopicUnitTests extends AnyFunSuite {
-  private val instance =  EdlaChangeTopic(
+class EdlaChangeUnitTests extends AnyFunSuite {
+  private val instance =  EdlaChange(
     app_id_snow = "N/A",
     data_definition_id = "TestingThis",
     environment = "DEV",
     format = "FooBar",
     guid = "DebugId",
     location = "ether",
-    operation = EdlaChangeTopic.Operation.CREATE(),
+    operation = EdlaChange.Operation.Create(),
     schema_link = "http://not.here",
     source_app = "ThisCode",
     timestamp_event = 12345
@@ -53,6 +53,6 @@ class EdlaChangeTopicUnitTests extends AnyFunSuite {
   }
 
   test("Deserializes from JSON properly") {
-    assertResult(instance)(decode[EdlaChangeTopic](json).getOrElse(throw new Exception("Failed to parse JSON")))
+    assertResult(instance)(decode[EdlaChange](json).getOrElse(throw new Exception("Failed to parse JSON")))
   }
 }

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package za.co.absa.KafkaCase.Writer
+package za.co.absa.kafkacase.writer
 
 import io.circe.Encoder
 import io.circe.syntax.EncoderOps
 import org.slf4j.LoggerFactory
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
-import za.co.absa.KafkaCase.Writer.WriterImpl.log
+import za.co.absa.kafkacase.writer.WriterImpl.log
 
 import java.util.Properties
 
