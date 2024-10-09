@@ -2,12 +2,22 @@
 Adapter for communicating from Scala with Kafka via case classes
 
 <!-- toc -->
+- [Running](#running)
 - [Architecture](#architecture)
     - [Models](#models)
     - [Reader](#reader)
     - [Writer](#writer)
     - [Examples](#examples)
 <!-- tocstop -->
+
+## Running
+First, you need to have installed Java and sbt
+
+To run unit tests cross-scala versions on clean build, run:
+`sbt +clean +test`
+
+To run examples, run:
+`sbt "project examples" run`
 
 ## Architecture
 
