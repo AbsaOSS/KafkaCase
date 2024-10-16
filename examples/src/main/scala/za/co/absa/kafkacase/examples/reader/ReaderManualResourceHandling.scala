@@ -21,7 +21,7 @@ import za.co.absa.kafkacase.reader.ReaderImpl
 
 import java.util.Properties
 
-object ManualResourceHandling {
+object ReaderManualResourceHandling {
   def apply[T: Decoder](readerProps: Properties, topicName: String): Unit = {
     val reader = new ReaderImpl[T](readerProps, topicName, neverEnding = false)
     try {

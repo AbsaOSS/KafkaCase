@@ -22,7 +22,7 @@ import za.co.absa.kafkacase.writer.WriterImpl
 import java.util.Properties
 import scala.util.Using
 
-object UsingsResourceHandling {
+object WriterUsingsResourceHandling {
   def apply[T: Encoder](writerProps: Properties, topicName: String, sampleMessageToWrite: T): Unit = {
     Using(new WriterImpl[T](writerProps, topicName)) { writer =>
       writer.Write("sampleMessageKey1", sampleMessageToWrite)
