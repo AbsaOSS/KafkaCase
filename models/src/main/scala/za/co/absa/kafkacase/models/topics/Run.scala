@@ -18,39 +18,51 @@ package za.co.absa.kafkacase.models.topics
 
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.JsonCodec
+import za.co.absa.kafkacase.models.topics.Run.Job
 
 @JsonCodec
-case class SchemaRun(
-  app_id_snow: String,
-  data_definition_id: String,
-  environment: String,
-  guid: String,
+case class Run(
+  event_id: String,
   job_ref: String,
-  message: String,
+  tenant_id: String,
   source_app: String,
-  status: SchemaRun.Status,
+  source_app_version: String,
+  environment: String,
+  timestamp_start: Long,
   timestamp_end: Long,
-  timestamp_start: Long
+  jobs: Seq[Job]
 )
 
-object SchemaRun {
+object Run {
+  @JsonCodec
+  case class Job(
+    catalog_id: String,
+    status: Status,
+    timestamp_start: Long,
+    timestamp_end: Long,
+    message: String
+  )
+
   sealed trait Status
 
   object Status {
-    case class Finished() extends Status
+    case class Succeeded() extends Status
     case class Failed() extends Status
     case class Killed() extends Status
+    case class Skipped() extends Status
 
     implicit val operationEncoder: Encoder[Status] = Encoder.encodeString.contramap[Status] {
-      case Finished() => s"Finished"
-      case Failed() => s"Failed"
-      case Killed() => s"Killed"
+      case Succeeded() => s"succeeded"
+      case Failed() => s"failed"
+      case Killed() => s"killed"
+      case Skipped() => s"skipped"
     }
 
     implicit val operationDecoder: Decoder[Status] = Decoder.decodeString.emap {
-      case "Finished" => Right(Finished())
-      case "Failed" => Right(Failed())
-      case "Killed" => Right(Killed())
+      case "succeeded" => Right(Succeeded())
+      case "failed" => Right(Failed())
+      case "killed" => Right(Killed())
+      case "skipped" => Right(Skipped())
     }
   }
 }
