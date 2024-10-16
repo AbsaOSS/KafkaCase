@@ -62,8 +62,10 @@ object KafkaCase {
     WriterManualResourceHandling(writerProps, topicName, sampleMessageToWrite)
     WriterCustomResourceHandling(writerProps, topicName, sampleMessageToWrite)
     WriterUsingsResourceHandling(writerProps, topicName, sampleMessageToWrite)
+    WriterWriteOnce(writerProps, topicName, sampleMessageToWrite)
     ReaderManualResourceHandling[EdlaChange](readerProps, topicName)
     ReaderCustomResourceHandling[EdlaChange](readerProps, topicName)
     ReaderUsingsResourceHandling[EdlaChange](readerProps, topicName)
+    ReaderReadOnce[EdlaChange](readerProps, topicName)
   }
 }

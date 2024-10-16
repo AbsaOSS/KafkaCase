@@ -14,29 +14,14 @@
  * limitations under the License.
  */
 
-package za.co.absa.kafkacase.writer
+package za.co.absa.kafkacase.examples.reader
 
-import io.circe.Encoder
+import io.circe.Decoder
+import za.co.absa.kafkacase.reader.Reader
 
 import java.util.Properties
 
-trait Writer[TType] extends AutoCloseable {
-  def write(key: String, value: TType): Unit
-  def flush(): Unit
-
-  def writeSync(key: String, value: TType): Unit = {
-    write(key, value)
-    flush()
-  }
-}
-
-object Writer {
-  def writeOnce[T: Encoder](writerProps: Properties, topicName: String, messageKey: String, sampleMessageToWrite: T): Unit = {
-    val writer = new WriterImpl[T](writerProps, topicName)
-    try {
-      writer.Write(messageKey, sampleMessageToWrite)
-    } finally {
-      writer.close()
-    }
-  }
+object ReadOnce {
+  def apply[T: Decoder](readerProps: Properties, topicName: String): Unit =
+    Reader.readOnce[T](readerProps, topicName, println)
 }
