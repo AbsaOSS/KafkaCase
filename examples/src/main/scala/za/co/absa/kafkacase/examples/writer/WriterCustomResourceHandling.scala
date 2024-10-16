@@ -25,8 +25,8 @@ import java.util.Properties
 object WriterCustomResourceHandling {
   def apply[T: Encoder](writerProps: Properties, topicName: String, sampleMessageToWrite: T): Unit = {
     withResource(new WriterImpl[T](writerProps, topicName))(writer => {
-      writer.Write("sampleMessageKey1", sampleMessageToWrite)
-      writer.Write("sampleMessageKey2", sampleMessageToWrite)
+      writer.write("sampleMessageKey1", sampleMessageToWrite)
+      writer.write("sampleMessageKey2", sampleMessageToWrite)
     })
   }
 }

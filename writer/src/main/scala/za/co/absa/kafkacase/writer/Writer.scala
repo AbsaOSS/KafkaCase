@@ -17,11 +17,11 @@
 package za.co.absa.kafkacase.writer
 
 trait Writer[TType] extends AutoCloseable {
-  def Write(key: String, value: TType): Unit
-  def Flush(): Unit
+  def write(key: String, value: TType): Unit
+  def flush(): Unit
 
-  def WriteSync(key: String, value: TType): Unit = {
-    Write(key, value)
-    Flush()
+  def writeSync(key: String, value: TType): Unit = {
+    write(key, value)
+    flush()
   }
 }

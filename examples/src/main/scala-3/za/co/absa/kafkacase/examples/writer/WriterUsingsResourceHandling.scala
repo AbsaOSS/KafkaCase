@@ -25,8 +25,8 @@ import scala.util.Using
 object WriterUsingsResourceHandling {
   def apply[T: Encoder](writerProps: Properties, topicName: String, sampleMessageToWrite: T): Unit = {
     Using(new WriterImpl[T](writerProps, topicName)) { writer =>
-      writer.Write("sampleMessageKey1", sampleMessageToWrite)
-      writer.Write("sampleMessageKey2", sampleMessageToWrite)
+      writer.write("sampleMessageKey1", sampleMessageToWrite)
+      writer.write("sampleMessageKey2", sampleMessageToWrite)
     }
   }
 }
