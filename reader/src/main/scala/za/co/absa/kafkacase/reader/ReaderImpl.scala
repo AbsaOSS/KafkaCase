@@ -16,17 +16,27 @@
 
 package za.co.absa.kafkacase.reader
 
+import com.typesafe.config.Config
 import io.circe.Decoder
 import io.circe.jawn.decode
 import org.slf4j.LoggerFactory
 import org.apache.kafka.clients.consumer.{ConsumerRecord, KafkaConsumer}
-import za.co.absa.kafkacase.reader.ReaderImpl.{DEFAULT_TIMEOUT, log}
+import za.co.absa.kafkacase.reader.ReaderImpl.{DEFAULT_TIMEOUT, convertConfigToProperties, log}
 
 import java.time.Duration
 import java.util
 import java.util.Properties
 
-class ReaderImpl[TType: Decoder](props: Properties, topic: String, timeout: Duration = DEFAULT_TIMEOUT, neverEnding: Boolean = true) extends Reader[TType] {
+class ReaderImpl[TType: Decoder](props: Properties, topic: String, timeout: Duration, neverEnding: Boolean) extends Reader[TType] {
+  // note: scala can't handle default parameters together with overloading.... hence slightly exponential number of auxiliary constructors
+  def this(config: Config, topic: String, timeout: Duration) = this(convertConfigToProperties(config), topic, timeout, true)
+  def this(config: Config, topic: String, neverEnding: Boolean) = this(convertConfigToProperties(config), topic, DEFAULT_TIMEOUT, neverEnding)
+  def this(config: Config, topic: String) = this(convertConfigToProperties(config), topic, DEFAULT_TIMEOUT, true)
+  def this(config: Config, topic: String, timeout: Duration, neverEnding: Boolean) = this(convertConfigToProperties(config), topic, timeout, neverEnding)
+  def this(props: Properties, topic: String, timeout: Duration) = this(props, topic, timeout, true)
+  def this(props: Properties, topic: String, neverEnding: Boolean) = this(props, topic, DEFAULT_TIMEOUT, neverEnding)
+  def this(props: Properties, topic: String) = this(props, topic, DEFAULT_TIMEOUT, true)
+
   private val consumer = new KafkaConsumer[String, String](props)
   consumer.subscribe(util.Arrays.asList(topic))
   private var singlePollIterator = fetchNextBatch()
@@ -61,4 +71,12 @@ class ReaderImpl[TType: Decoder](props: Properties, topic: String, timeout: Dura
 object ReaderImpl {
   private val DEFAULT_TIMEOUT: Duration = Duration.ofSeconds(3)
   private val log = LoggerFactory.getLogger(this.getClass)
+
+  private def convertConfigToProperties(config: Config): Properties = {
+    val properties = new Properties()
+    config.entrySet().forEach { entry =>
+      properties.put(entry.getKey, config.getString(entry.getKey))
+    }
+    properties
+  }
 }

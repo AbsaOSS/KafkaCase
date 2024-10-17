@@ -16,15 +16,14 @@
 
 package za.co.absa.kafkacase.examples
 
-import org.apache.kafka.clients.consumer.ConsumerConfig
-import org.apache.kafka.clients.producer.ProducerConfig
+import com.typesafe.config.ConfigFactory
 import za.co.absa.kafkacase.examples.reader.{ReaderCustomResourceHandling, ReaderManualResourceHandling, ReaderReadOnce, ReaderUsingsResourceHandling}
 import za.co.absa.kafkacase.examples.writer.{WriterCustomResourceHandling, WriterManualResourceHandling, WriterUsingsResourceHandling, WriterWriteOnce}
 import za.co.absa.kafkacase.models.topics.EdlaChange
 
-import java.util.{Properties, UUID}
-
 object KafkaCase {
+  private val config = ConfigFactory.load()
+
   // This goes from your application logic
   private val sampleMessageToWrite = EdlaChange(
     app_id_snow = "N/A",
@@ -39,33 +38,16 @@ object KafkaCase {
     timestamp_event = 12345
   )
 
-  // This goes from your config / domain knowledge
-  private val topicName = "KillMePleaseTopic"
-
-  // This goes from your writer configs
-  private val writerProps = new Properties()
-  writerProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "ZADALNRAPP00009.corp.dsarena.com:9092")
-  writerProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer")
-  writerProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer")
-
-  // This goes from your reader configs
-  private val readerProps = new Properties()
-  readerProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "ZADALNRAPP00009.corp.dsarena.com:9092")
-  readerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer")
-  readerProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer")
-  readerProps.put(ConsumerConfig.CLIENT_ID_CONFIG, s"DebugConsumer_${UUID.randomUUID()}")
-  readerProps.put(ConsumerConfig.GROUP_ID_CONFIG, s"DebugGroup_${UUID.randomUUID()}")
-  readerProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
-
-
   def main(args: Array[String]): Unit = {
-    WriterManualResourceHandling(writerProps, topicName, sampleMessageToWrite)
-    WriterCustomResourceHandling(writerProps, topicName, sampleMessageToWrite)
-    WriterUsingsResourceHandling(writerProps, topicName, sampleMessageToWrite)
-    WriterWriteOnce(writerProps, topicName, sampleMessageToWrite)
-    ReaderManualResourceHandling[EdlaChange](readerProps, topicName)
-    ReaderCustomResourceHandling[EdlaChange](readerProps, topicName)
-    ReaderUsingsResourceHandling[EdlaChange](readerProps, topicName)
-    ReaderReadOnce[EdlaChange](readerProps, topicName)
+    val writerConfig = config.getConfig("writer")
+    WriterManualResourceHandling(writerConfig, topicName, sampleMessageToWrite)
+    WriterCustomResourceHandling(writerConfig, topicName, sampleMessageToWrite)
+    WriterUsingsResourceHandling(writerConfig, topicName, sampleMessageToWrite)
+    WriterWriteOnce(writerConfig, topicName, sampleMessageToWrite)
+    val readerConfig = config.getConfig("reader")
+    ReaderManualResourceHandling[EdlaChange](readerConfig, topicName)
+    ReaderCustomResourceHandling[EdlaChange](readerConfig, topicName)
+    ReaderUsingsResourceHandling[EdlaChange](readerConfig, topicName)
+    ReaderReadOnce[EdlaChange](readerConfig, topicName)
   }
 }

@@ -16,15 +16,18 @@
 
 package za.co.absa.kafkacase.writer
 
+import com.typesafe.config.Config
 import io.circe.Encoder
 import io.circe.syntax.EncoderOps
 import org.slf4j.LoggerFactory
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
-import za.co.absa.kafkacase.writer.WriterImpl.log
+import za.co.absa.kafkacase.writer.WriterImpl.{convertConfigToProperties, log}
 
 import java.util.Properties
 
 class WriterImpl[TType: Encoder](props: Properties, topic: String) extends Writer[TType] {
+  def this(config: Config, topic: String) = this(convertConfigToProperties(config), topic)
+
   private val producer = new KafkaProducer[String, String](props)
 
   def write(key: String, value: TType): Unit = {
@@ -39,4 +42,12 @@ class WriterImpl[TType: Encoder](props: Properties, topic: String) extends Write
 
 object WriterImpl {
   private val log = LoggerFactory.getLogger(this.getClass)
+
+  private def convertConfigToProperties(config: Config): Properties = {
+    val properties = new Properties()
+    config.entrySet().forEach { entry =>
+      properties.put(entry.getKey, config.getString(entry.getKey))
+    }
+    properties
+  }
 }

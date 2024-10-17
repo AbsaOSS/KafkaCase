@@ -16,15 +16,14 @@
 
 package za.co.absa.kafkacase.examples.reader
 
+import com.typesafe.config.Config
 import io.circe.Decoder
 import za.co.absa.kafkacase.models.utils.ResourceHandler.withResource
 import za.co.absa.kafkacase.reader.ReaderImpl
 
-import java.util.Properties
-
 object ReaderCustomResourceHandling {
-  def apply[T: Decoder](readerProps: Properties, topicName: String): Unit = {
-    withResource(new ReaderImpl[T](readerProps, topicName, neverEnding = false))(reader => {
+  def apply[T: Decoder](readerConf: Config, topicName: String): Unit = {
+    withResource(new ReaderImpl[T](readerConf, topicName, neverEnding = false))(reader => {
       for (item <- reader)
         println(item)
     })
