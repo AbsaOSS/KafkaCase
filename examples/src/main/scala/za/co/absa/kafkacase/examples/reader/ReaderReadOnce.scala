@@ -22,5 +22,5 @@ import za.co.absa.kafkacase.reader.Reader
 
 object ReaderReadOnce {
   def apply[T: Decoder](readerConf: Config, topicName: String): Unit =
-    Reader.readOnce[T](readerConf, topicName, println)
+    Reader.readOnce[T](readerConf, topicName, (item: (String, Either[String, T])) => println(item))
 }
