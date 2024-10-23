@@ -17,16 +17,10 @@
 package za.co.absa.kafkacase.examples.reader
 
 import io.circe.Decoder
-import za.co.absa.kafkacase.reader.ReaderImpl
-
 import java.util.Properties
-import scala.util.Using
 
-object UsingsResourceHandling {
+object ReaderUsingsResourceHandling {
   def apply[T: Decoder](readerProps: Properties, topicName: String): Unit = {
-    Using(new ReaderImpl[T](readerProps, topicName, neverEnding = false)) { reader =>
-      for (item <- reader)
-        println(item)
-    }
+    println("Scala 3 feature")
   }
 }

@@ -27,12 +27,12 @@ import java.util.Properties
 class WriterImpl[TType: Encoder](props: Properties, topic: String) extends Writer[TType] {
   private val producer = new KafkaProducer[String, String](props)
 
-  def Write(key: String, value: TType): Unit = {
+  def write(key: String, value: TType): Unit = {
     log.info(f"Writing: $key => $value")
     producer.send(new ProducerRecord[String, String](topic, key, value.asJson.noSpaces))
   }
 
-  def Flush(): Unit = producer.flush()
+  def flush(): Unit = producer.flush()
 
   override def close(): Unit = producer.close()
 }

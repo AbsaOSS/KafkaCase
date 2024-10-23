@@ -17,18 +17,10 @@
 package za.co.absa.kafkacase.examples.writer
 
 import io.circe.Encoder
-import za.co.absa.kafkacase.writer.WriterImpl
-
 import java.util.Properties
 
-object ManualResourceHandling {
+object WriterUsingsResourceHandling {
   def apply[T: Encoder](writerProps: Properties, topicName: String, sampleMessageToWrite: T): Unit = {
-    val writer = new WriterImpl[T](writerProps, topicName)
-    try {
-      writer.Write("sampleMessageKey1", sampleMessageToWrite)
-      writer.Write("sampleMessageKey2", sampleMessageToWrite)
-    } finally {
-      writer.close()
-    }
+    println("Scala 3 feature")
   }
 }

@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package za.co.absa.kafkacase.examples.writer
+package za.co.absa.kafkacase.examples.reader
 
-import io.circe.Encoder
-import za.co.absa.kafkacase.writer.WriterImpl
+import io.circe.Decoder
+import za.co.absa.kafkacase.reader.ReaderImpl
 
 import java.util.Properties
 import scala.util.Using
 
-object UsingsResourceHandling {
-  def apply[T: Encoder](writerProps: Properties, topicName: String, sampleMessageToWrite: T): Unit = {
-    Using(new WriterImpl[T](writerProps, topicName)) { writer =>
-      writer.Write("sampleMessageKey1", sampleMessageToWrite)
-      writer.Write("sampleMessageKey2", sampleMessageToWrite)
+object ReaderUsingsResourceHandling {
+  def apply[T: Decoder](readerProps: Properties, topicName: String): Unit = {
+    Using(new ReaderImpl[T](readerProps, topicName, neverEnding = false)) { reader =>
+      for (item <- reader)
+        println(item)
     }
   }
 }

@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package za.co.absa.kafkacase.examples.writer
+package za.co.absa.kafkacase.examples.reader
 
-import io.circe.Encoder
+import io.circe.Decoder
 import za.co.absa.kafkacase.models.utils.ResourceHandler.withResource
-import za.co.absa.kafkacase.writer.WriterImpl
+import za.co.absa.kafkacase.reader.ReaderImpl
 
 import java.util.Properties
 
-object CustomResourceHandling {
-  def apply[T: Encoder](writerProps: Properties, topicName: String, sampleMessageToWrite: T): Unit = {
-    withResource(new WriterImpl[T](writerProps, topicName))(writer => {
-      writer.Write("sampleMessageKey1", sampleMessageToWrite)
-      writer.Write("sampleMessageKey2", sampleMessageToWrite)
+object ReaderCustomResourceHandling {
+  def apply[T: Decoder](readerProps: Properties, topicName: String): Unit = {
+    withResource(new ReaderImpl[T](readerProps, topicName, neverEnding = false))(reader => {
+      for (item <- reader)
+        println(item)
     })
   }
 }
