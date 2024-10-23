@@ -34,7 +34,7 @@ object Writer {
   def writeOnce[T: Encoder](writerProps: Properties, topicName: String, messageKey: String, sampleMessageToWrite: T): Unit = {
     val writer = new WriterImpl[T](writerProps, topicName)
     try {
-      writer.Write(messageKey, sampleMessageToWrite)
+      writer.write(messageKey, sampleMessageToWrite)
     } finally {
       writer.close()
     }
