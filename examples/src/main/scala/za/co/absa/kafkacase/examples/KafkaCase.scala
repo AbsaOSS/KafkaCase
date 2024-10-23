@@ -40,14 +40,23 @@ object KafkaCase {
 
   def main(args: Array[String]): Unit = {
     val writerConfig = config.getConfig("writer")
-    WriterManualResourceHandling(writerConfig, topicName, sampleMessageToWrite)
-    WriterCustomResourceHandling(writerConfig, topicName, sampleMessageToWrite)
-    WriterUsingsResourceHandling(writerConfig, topicName, sampleMessageToWrite)
-    WriterWriteOnce(writerConfig, topicName, sampleMessageToWrite)
     val readerConfig = config.getConfig("reader")
+    val topicName = config.getString("topicName")
+    println("Sample how to use writer with manual resource handling")
+    WriterManualResourceHandling(writerConfig, topicName, sampleMessageToWrite)
+    println("Sample how to use writer with custom resource handling")
+    WriterCustomResourceHandling(writerConfig, topicName, sampleMessageToWrite)
+    println("Sample how to use writer with Usings in scala 3")
+    WriterUsingsResourceHandling(writerConfig, topicName, sampleMessageToWrite)
+    println("Sample how to use writer write-once fashion")
+    WriterWriteOnce(writerConfig, topicName, sampleMessageToWrite)
+    println("Sample how to use reader with manual resource handling")
     ReaderManualResourceHandling[EdlaChange](readerConfig, topicName)
+    println("Sample how to use reader with custom resource handling")
     ReaderCustomResourceHandling[EdlaChange](readerConfig, topicName)
+    println("Sample how to use reader with Usings in scala 3")
     ReaderUsingsResourceHandling[EdlaChange](readerConfig, topicName)
+    println("Sample how to use reader read-once fashion")
     ReaderReadOnce[EdlaChange](readerConfig, topicName)
   }
 }

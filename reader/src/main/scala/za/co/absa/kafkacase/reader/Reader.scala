@@ -16,6 +16,7 @@
 
 package za.co.absa.kafkacase.reader
 
+import com.typesafe.config.Config
 import io.circe.Decoder
 
 import java.util.Properties
@@ -25,6 +26,16 @@ trait Reader[TType] extends Iterator[(String, Either[String, TType])] with AutoC
 object Reader {
   def readOnce[T: Decoder](readerProps: Properties, topicName: String, work: ((String, Either[String, T])) => Unit): Unit = {
     val reader = new ReaderImpl[T](readerProps, topicName, neverEnding = false)
+    try {
+      for (item <- reader)
+        work(item)
+    } finally {
+      reader.close()
+    }
+  }
+
+  def readOnce[T: Decoder](readerConf: Config, topicName: String, work: ((String, Either[String, T])) => Unit): Unit = {
+    val reader = new ReaderImpl[T](readerConf, topicName, neverEnding = false)
     try {
       for (item <- reader)
         work(item)

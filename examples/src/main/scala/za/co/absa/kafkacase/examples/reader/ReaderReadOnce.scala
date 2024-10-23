@@ -16,12 +16,11 @@
 
 package za.co.absa.kafkacase.examples.reader
 
+import com.typesafe.config.Config
 import io.circe.Decoder
 import za.co.absa.kafkacase.reader.Reader
 
-import java.util.Properties
-
 object ReaderReadOnce {
-  def apply[T: Decoder](readerProps: Properties, topicName: String): Unit =
-    Reader.readOnce[T](readerProps, topicName, println)
+  def apply[T: Decoder](readerConf: Config, topicName: String): Unit =
+    Reader.readOnce[T](readerConf, topicName, println)
 }
