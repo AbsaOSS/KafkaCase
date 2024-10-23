@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package za.co.absa.kafkacase.examples.reader
+package za.co.absa.kafkacase.examples.writer
 
-import io.circe.Decoder
-import za.co.absa.kafkacase.reader.Reader
+import io.circe.Encoder
+import za.co.absa.kafkacase.writer.Writer
 
 import java.util.Properties
 
-object ReadOnce {
-  def apply[T: Decoder](readerProps: Properties, topicName: String): Unit =
-    Reader.readOnce[T](readerProps, topicName, println)
+object WriterWriteOnce {
+  def apply[T: Encoder](writerProps: Properties, topicName: String, sampleMessageToWrite: T): Unit =
+    Writer.writeOnce(writerProps, topicName, "sampleKey", sampleMessageToWrite)
 }
