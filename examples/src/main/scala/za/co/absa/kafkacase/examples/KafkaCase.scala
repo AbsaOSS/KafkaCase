@@ -18,8 +18,8 @@ package za.co.absa.kafkacase.examples
 
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.producer.ProducerConfig
-import za.co.absa.kafkacase.examples.reader.{ReaderCustomResourceHandling, ReaderManualResourceHandling, ReaderUsingsResourceHandling}
-import za.co.absa.kafkacase.examples.writer.{WriterCustomResourceHandling, WriterManualResourceHandling, WriterUsingsResourceHandling}
+import za.co.absa.kafkacase.examples.reader.{ReaderCustomResourceHandling, ReaderManualResourceHandling, ReaderReadOnce, ReaderUsingsResourceHandling}
+import za.co.absa.kafkacase.examples.writer.{WriterCustomResourceHandling, WriterManualResourceHandling, WriterUsingsResourceHandling, WriterWriteOnce}
 import za.co.absa.kafkacase.models.topics.EdlaChange
 
 import java.util.{Properties, UUID}
@@ -62,8 +62,10 @@ object KafkaCase {
     WriterManualResourceHandling(writerProps, topicName, sampleMessageToWrite)
     WriterCustomResourceHandling(writerProps, topicName, sampleMessageToWrite)
     WriterUsingsResourceHandling(writerProps, topicName, sampleMessageToWrite)
+    WriterWriteOnce(writerProps, topicName, sampleMessageToWrite)
     ReaderManualResourceHandling[EdlaChange](readerProps, topicName)
     ReaderCustomResourceHandling[EdlaChange](readerProps, topicName)
     ReaderUsingsResourceHandling[EdlaChange](readerProps, topicName)
+    ReaderReadOnce[EdlaChange](readerProps, topicName)
   }
 }

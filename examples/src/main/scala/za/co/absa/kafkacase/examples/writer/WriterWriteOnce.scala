@@ -14,22 +14,14 @@
  * limitations under the License.
  */
 
-package za.co.absa.kafkacase.reader
+package za.co.absa.kafkacase.examples.writer
 
-import io.circe.Decoder
+import io.circe.Encoder
+import za.co.absa.kafkacase.writer.Writer
 
 import java.util.Properties
 
-trait Reader[TType] extends Iterator[(String, Either[String, TType])] with AutoCloseable
-
-object Reader {
-  def readOnce[T: Decoder](readerProps: Properties, topicName: String, work: ((String, Either[String, T])) => Unit): Unit = {
-    val reader = new ReaderImpl[T](readerProps, topicName, neverEnding = false)
-    try {
-      for (item <- reader)
-        work(item)
-    } finally {
-      reader.close()
-    }
-  }
+object WriterWriteOnce {
+  def apply[T: Encoder](writerProps: Properties, topicName: String, sampleMessageToWrite: T): Unit =
+    Writer.writeOnce(writerProps, topicName, "sampleKey", sampleMessageToWrite)
 }
