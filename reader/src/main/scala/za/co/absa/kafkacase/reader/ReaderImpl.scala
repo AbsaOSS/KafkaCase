@@ -28,14 +28,6 @@ import java.util
 import java.util.Properties
 
 class ReaderImpl[TType: Decoder](props: Properties, topic: String, timeout: Duration, neverEnding: Boolean) extends Reader[TType] {
-  // note: scala can't handle default parameters together with overloading.... hence slightly exponential number of auxiliary constructors
-  def this(config: Config, topic: String, timeout: Duration) = this(convertConfigToProperties(config), topic, timeout, true)
-  def this(config: Config, topic: String, neverEnding: Boolean) = this(convertConfigToProperties(config), topic, DEFAULT_TIMEOUT, neverEnding)
-  def this(config: Config, topic: String) = this(convertConfigToProperties(config), topic, DEFAULT_TIMEOUT, true)
-  def this(config: Config, topic: String, timeout: Duration, neverEnding: Boolean) = this(convertConfigToProperties(config), topic, timeout, neverEnding)
-  def this(props: Properties, topic: String, timeout: Duration) = this(props, topic, timeout, true)
-  def this(props: Properties, topic: String, neverEnding: Boolean) = this(props, topic, DEFAULT_TIMEOUT, neverEnding)
-  def this(props: Properties, topic: String) = this(props, topic, DEFAULT_TIMEOUT, true)
 
   private val consumer = new KafkaConsumer[String, String](props)
   consumer.subscribe(util.Arrays.asList(topic))
