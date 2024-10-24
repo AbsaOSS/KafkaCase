@@ -22,7 +22,7 @@ import za.co.absa.kafkacase.reader.ReaderImpl
 
 object ReaderManualResourceHandling {
   def apply[T: Decoder](readerConf: Config, topicName: String): Unit = {
-    val reader = new ReaderImpl[T](readerConf, topicName, neverEnding = false)
+    val reader = ReaderImpl[T](readerConf, topicName)
     try {
       for (item <- reader)
         println(item)

@@ -23,7 +23,7 @@ import za.co.absa.kafkacase.reader.ReaderImpl
 
 object ReaderCustomResourceHandling {
   def apply[T: Decoder](readerConf: Config, topicName: String): Unit = {
-    withResource(new ReaderImpl[T](readerConf, topicName, neverEnding = false))(reader => {
+    withResource(ReaderImpl[T](readerConf, topicName))(reader => {
       for (item <- reader)
         println(item)
     })
