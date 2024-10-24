@@ -19,12 +19,11 @@ package za.co.absa.kafkacase.examples.reader
 import io.circe.Decoder
 import za.co.absa.kafkacase.reader.ReaderImpl
 
-import java.util.Properties
 import scala.util.Using
 
 object ReaderUsingsResourceHandling {
-  def apply[T: Decoder](readerProps: Properties, topicName: String): Unit = {
-    Using(new ReaderImpl[T](readerProps, topicName, neverEnding = false)) { reader =>
+  def apply[T: Decoder](readerConf: Config, topicName: String): Unit = {
+    Using(new ReaderImpl[T](readerConf, topicName, neverEnding = false)) { reader =>
       for (item <- reader)
         println(item)
     }

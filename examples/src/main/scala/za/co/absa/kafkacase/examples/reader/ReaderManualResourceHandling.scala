@@ -16,14 +16,13 @@
 
 package za.co.absa.kafkacase.examples.reader
 
+import com.typesafe.config.Config
 import io.circe.Decoder
 import za.co.absa.kafkacase.reader.ReaderImpl
 
-import java.util.Properties
-
 object ReaderManualResourceHandling {
-  def apply[T: Decoder](readerProps: Properties, topicName: String): Unit = {
-    val reader = new ReaderImpl[T](readerProps, topicName, neverEnding = false)
+  def apply[T: Decoder](readerConf: Config, topicName: String): Unit = {
+    val reader = ReaderImpl[T](readerConf, topicName)
     try {
       for (item <- reader)
         println(item)

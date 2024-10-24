@@ -16,6 +16,7 @@
 
 package za.co.absa.kafkacase.writer
 
+import com.typesafe.config.Config
 import io.circe.Encoder
 
 import java.util.Properties
@@ -33,6 +34,15 @@ trait Writer[TType] extends AutoCloseable {
 object Writer {
   def writeOnce[T: Encoder](writerProps: Properties, topicName: String, messageKey: String, sampleMessageToWrite: T): Unit = {
     val writer = new WriterImpl[T](writerProps, topicName)
+    try {
+      writer.write(messageKey, sampleMessageToWrite)
+    } finally {
+      writer.close()
+    }
+  }
+
+  def writeOnce[T: Encoder](writerConf: Config, topicName: String, messageKey: String, sampleMessageToWrite: T): Unit = {
+    val writer = new WriterImpl[T](writerConf, topicName)
     try {
       writer.write(messageKey, sampleMessageToWrite)
     } finally {

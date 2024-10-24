@@ -16,6 +16,7 @@
 
 package za.co.absa.kafkacase.examples.writer
 
+import com.typesafe.config.Config
 import io.circe.Encoder
 import za.co.absa.kafkacase.models.utils.ResourceHandler.withResource
 import za.co.absa.kafkacase.writer.WriterImpl
@@ -23,8 +24,8 @@ import za.co.absa.kafkacase.writer.WriterImpl
 import java.util.Properties
 
 object WriterCustomResourceHandling {
-  def apply[T: Encoder](writerProps: Properties, topicName: String, sampleMessageToWrite: T): Unit = {
-    withResource(new WriterImpl[T](writerProps, topicName))(writer => {
+  def apply[T: Encoder](writerConf: Config, topicName: String, sampleMessageToWrite: T): Unit = {
+    withResource(new WriterImpl[T](writerConf, topicName))(writer => {
       writer.write("sampleMessageKey1", sampleMessageToWrite)
       writer.write("sampleMessageKey2", sampleMessageToWrite)
     })

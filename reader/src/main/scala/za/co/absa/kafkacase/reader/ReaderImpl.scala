@@ -16,17 +16,18 @@
 
 package za.co.absa.kafkacase.reader
 
+import com.typesafe.config.Config
 import io.circe.Decoder
 import io.circe.jawn.decode
 import org.slf4j.LoggerFactory
 import org.apache.kafka.clients.consumer.{ConsumerRecord, KafkaConsumer}
-import za.co.absa.kafkacase.reader.ReaderImpl.{DEFAULT_TIMEOUT, log}
+import za.co.absa.kafkacase.reader.ReaderImpl.{DEFAULT_TIMEOUT, convertConfigToProperties, log}
 
 import java.time.Duration
 import java.util
 import java.util.Properties
 
-class ReaderImpl[TType: Decoder](props: Properties, topic: String, timeout: Duration = DEFAULT_TIMEOUT, neverEnding: Boolean = true) extends Reader[TType] {
+class ReaderImpl[TType: Decoder](props: Properties, topic: String, timeout: Duration, neverEnding: Boolean) extends Reader[TType] {
   private val consumer = new KafkaConsumer[String, String](props)
   consumer.subscribe(util.Arrays.asList(topic))
   private var singlePollIterator = fetchNextBatch()
@@ -60,5 +61,41 @@ class ReaderImpl[TType: Decoder](props: Properties, topic: String, timeout: Dura
 
 object ReaderImpl {
   private val DEFAULT_TIMEOUT: Duration = Duration.ofSeconds(3)
+  private val DEFAULT_NEVER_ENDING: Boolean = true
   private val log = LoggerFactory.getLogger(this.getClass)
+
+  // note: scala can't handle default parameters together with overloading.... hence slightly exponential number of auxiliary apply methods
+  // Primary method that contains default arguments
+  def apply[TType: Decoder](props: Properties, topic: String, timeout: Duration = DEFAULT_TIMEOUT, neverEnding: Boolean = DEFAULT_NEVER_ENDING): ReaderImpl[TType] = {
+    new ReaderImpl[TType](props, topic, timeout, neverEnding)
+  }
+
+  // Overloaded method with Config and all optional arguments
+  def apply[TType: Decoder](config: Config, topic: String, timeout: Duration, neverEnding: Boolean): ReaderImpl[TType] = {
+    val props = convertConfigToProperties(config)
+    apply[TType](props, topic, timeout, neverEnding)
+  }
+
+  // Overloaded method with Config and neverEnding optional argument
+  def apply[TType: Decoder](config: Config, topic: String, neverEnding: Boolean): ReaderImpl[TType] = {
+    apply[TType](config, topic, DEFAULT_TIMEOUT, neverEnding)
+  }
+
+  // Overloaded method with Config and timeout optional argument
+  def apply[TType: Decoder](config: Config, topic: String, timeout: Duration): ReaderImpl[TType] = {
+    apply[TType](config, topic, timeout, DEFAULT_NEVER_ENDING)
+  }
+
+  // Overloaded method with Config and none of optional arguments
+  def apply[TType: Decoder](config: Config, topic: String): ReaderImpl[TType] = {
+    apply[TType](config, topic, DEFAULT_TIMEOUT, DEFAULT_NEVER_ENDING)
+  }
+
+  private def convertConfigToProperties(config: Config): Properties = {
+    val properties = new Properties()
+    config.entrySet().forEach { entry =>
+      properties.put(entry.getKey, config.getString(entry.getKey))
+    }
+    properties
+  }
 }

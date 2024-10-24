@@ -16,12 +16,11 @@
 
 package za.co.absa.kafkacase.examples.writer
 
+import com.typesafe.config.Config
 import io.circe.Encoder
 import za.co.absa.kafkacase.writer.Writer
 
-import java.util.Properties
-
 object WriterWriteOnce {
-  def apply[T: Encoder](writerProps: Properties, topicName: String, sampleMessageToWrite: T): Unit =
-    Writer.writeOnce(writerProps, topicName, "sampleKey", sampleMessageToWrite)
+  def apply[T: Encoder](writerConf: Config, topicName: String, sampleMessageToWrite: T): Unit =
+    Writer.writeOnce(writerConf, topicName, "sampleKey", sampleMessageToWrite)
 }

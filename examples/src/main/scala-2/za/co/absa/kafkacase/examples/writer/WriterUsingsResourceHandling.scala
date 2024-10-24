@@ -16,11 +16,11 @@
 
 package za.co.absa.kafkacase.examples.writer
 
+import com.typesafe.config.Config
 import io.circe.Encoder
-import java.util.Properties
 
 object WriterUsingsResourceHandling {
-  def apply[T: Encoder](writerProps: Properties, topicName: String, sampleMessageToWrite: T): Unit = {
+  def apply[T: Encoder](writerConf: Config, topicName: String, sampleMessageToWrite: T): Unit = {
     println("Scala 3 feature")
   }
 }
