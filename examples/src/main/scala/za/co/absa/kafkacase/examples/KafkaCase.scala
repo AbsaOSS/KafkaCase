@@ -26,16 +26,17 @@ object KafkaCase {
 
   // This goes from your application logic
   private val sampleMessageToWrite = EdlaChange(
-    app_id_snow = "N/A",
-    data_definition_id = "TestingThis",
-    environment = "DEV",
-    format = "FooBar",
-    guid = "DebugId",
-    location = "ether",
-    operation = EdlaChange.Operation.Create(),
-    schema_link = "http://not.here",
-    source_app = "ThisCode",
-    timestamp_event = 12345
+    event_id = "SampleId",
+    tenant_id = "NoOneImportant",
+    source_app = "SampleApp",
+    source_app_version = "v over 9000",
+    environment = "Example",
+    timestamp_event = 12345,
+    catalog_id = "ExamplesCatalog",
+    operation = EdlaChange.Operation.Overwrite(),
+    location = "ScalaSamples",
+    format = "SampleFormat",
+    formatOptions = Map("ExtraOption" -> "nope")
   )
 
   def main(args: Array[String]): Unit = {

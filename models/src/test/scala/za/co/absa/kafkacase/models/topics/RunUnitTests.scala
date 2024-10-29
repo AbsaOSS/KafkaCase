@@ -20,43 +20,51 @@ import io.circe.jawn.decode
 import io.circe.syntax.EncoderOps
 import org.scalatest.funsuite.AnyFunSuite
 
-class EdlaChangeUnitTests extends AnyFunSuite {
-  private val instance =  EdlaChange(
-    event_id = "TestEventId",
-    tenant_id = "TestTenantId",
-    source_app = "TestSrc",
+class RunUnitTests extends AnyFunSuite {
+  private val instance =  Run(
+    event_id = "TestId",
+    job_ref = "TestJob",
+    tenant_id = "TestTenant",
+    source_app = "UnitTestSrc",
     source_app_version = "v9000",
     environment = "UnitTestEnv",
-    timestamp_event = 12345,
-    catalog_id = "TestCatalog",
-    operation = EdlaChange.Operation.Delete(),
-    location = "UnitTest",
-    format = "TestFormat",
-    formatOptions = Map("Foo" -> "Bar")
+    timestamp_start = 12345,
+    timestamp_end = 6789,
+    jobs = Seq(Run.Job(
+      catalog_id = "FooId",
+      status = Run.Status.Killed(),
+      timestamp_start = 12346,
+      timestamp_end = 6788,
+      message = "TestingLikeCrazy"
+  ))
   )
 
   private val json =
     """{
-      |  "event_id" : "TestEventId",
-      |  "tenant_id" : "TestTenantId",
-      |  "source_app" : "TestSrc",
+      |  "event_id" : "TestId",
+      |  "job_ref" : "TestJob",
+      |  "tenant_id" : "TestTenant",
+      |  "source_app" : "UnitTestSrc",
       |  "source_app_version" : "v9000",
       |  "environment" : "UnitTestEnv",
-      |  "timestamp_event" : 12345,
-      |  "catalog_id" : "TestCatalog",
-      |  "operation" : "delete",
-      |  "location" : "UnitTest",
-      |  "format" : "TestFormat",
-      |  "formatOptions" : {
-      |    "Foo" : "Bar"
-      |  }
+      |  "timestamp_start" : 12345,
+      |  "timestamp_end" : 6789,
+      |  "jobs" : [
+      |    {
+      |      "catalog_id" : "FooId",
+      |      "status" : "killed",
+      |      "timestamp_start" : 12346,
+      |      "timestamp_end" : 6788,
+      |      "message" : "TestingLikeCrazy"
+      |    }
+      |  ]
       |}""".stripMargin
 
   test("Serializes to JSON properly") {
-   assertResult(json)(instance.asJson.toString())
+    assertResult(json)(instance.asJson.toString())
   }
 
   test("Deserializes from JSON properly") {
-    assertResult(instance)(decode[EdlaChange](json).getOrElse(throw new Exception("Failed to parse JSON")))
+    assertResult(instance)(decode[Run](json).getOrElse(throw new Exception("Failed to parse JSON")))
   }
 }

@@ -21,36 +21,40 @@ import io.circe.generic.JsonCodec
 
 @JsonCodec
 case class EdlaChange(
-  app_id_snow: String,
-  data_definition_id: String,
-  environment: String,
-  format: String,
-  guid: String,
-  location: String,
-  operation: EdlaChange.Operation,
-  schema_link: String,
+  event_id: String,
+  tenant_id: String,
   source_app: String,
-  timestamp_event: Long
+  source_app_version: String,
+  environment: String,
+  timestamp_event: Long,
+  catalog_id: String,
+  operation: EdlaChange.Operation,
+  location: String,
+  format: String,
+  formatOptions: Map[String, String]
 )
 
 object EdlaChange {
   sealed trait Operation
 
   object Operation {
-    case class Create() extends Operation
-    case class Update() extends Operation
+    case class Overwrite() extends Operation
+    case class Append() extends Operation
     case class Archive() extends Operation
+    case class Delete() extends Operation
 
     implicit val operationEncoder: Encoder[Operation] = Encoder.encodeString.contramap[Operation] {
-      case Create() => s"CREATE"
-      case Update() => s"UPDATE"
-      case Archive() => s"ARCHIVE"
+      case Overwrite() => s"overwrite"
+      case Append() => s"append"
+      case Archive() => s"archive"
+      case Delete() => s"delete"
     }
 
     implicit val operationDecoder: Decoder[Operation] = Decoder.decodeString.emap {
-      case "CREATE" => Right(Create())
-      case "UPDATE" => Right(Update())
-      case "ARCHIVE" => Right(Archive())
+      case "overwrite" => Right(Overwrite())
+      case "append" => Right(Append())
+      case "archive" => Right(Archive())
+      case "delete" => Right(Delete())
     }
   }
 }
