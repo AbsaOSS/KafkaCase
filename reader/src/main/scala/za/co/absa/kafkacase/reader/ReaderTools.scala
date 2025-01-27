@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package za.co.absa.kafkacase.examples.reader
+package za.co.absa.kafkacase.reader
 
-import com.typesafe.config.Config
 import io.circe.Decoder
-import za.co.absa.kafkacase.reader.Reader
+import io.circe.jawn.decode
+import org.apache.kafka.clients.consumer.ConsumerRecord
 
-object ReaderManualResourceHandling {
-  def apply[T: Decoder](readerConf: Config, topicName: String): Unit = {
-    val reader = Reader[T](readerConf, topicName)
-    try {
-      for (item <- reader)
-        println(item)
-    } finally {
-      reader.close()
+object ReaderTools {
+  def parseRecord[TType: Decoder](record: ConsumerRecord[String, String]): (String, Either[String, TType]) = {
+    val maybeTyped = decode[TType](record.value()) match {
+      case Left(_) => Left(s"Cannot parse ${record.value()}")
+      case Right(item) => Right(item)
     }
+    record.key() -> maybeTyped
   }
 }
