@@ -19,11 +19,11 @@ package za.co.absa.kafkacase.examples.reader
 import com.typesafe.config.Config
 import io.circe.Decoder
 import za.co.absa.kafkacase.models.utils.ResourceHandler.withResource
-import za.co.absa.kafkacase.reader.ReaderImpl
+import za.co.absa.kafkacase.reader.Reader
 
 object ReaderCustomResourceHandling {
   def apply[T: Decoder](readerConf: Config, topicName: String): Unit = {
-    withResource(ReaderImpl[T](readerConf, topicName))(reader => {
+    withResource(Reader[T](readerConf, topicName))(reader => {
       for (item <- reader)
         println(item)
     })
